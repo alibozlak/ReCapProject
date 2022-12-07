@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstracts
 {
-    public interface IBrandDal : IEntityDal<Brand>
+    public interface IBrandDal : IEntityRepository<Brand>
     {
-        bool ExistByBrandId(int brandId);
     }
 }

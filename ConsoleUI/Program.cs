@@ -1,6 +1,6 @@
 ﻿using Business.Abstracts;
 using Business.Concretes;
-using DataAccess.Concretes.InMemory;
+using DataAccess.Concretes.EntityFramework;
 using Entities.Concretes;
 
 namespace ConsoleUI
@@ -9,23 +9,17 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            Car car4 = new Car { 
-                CarId = 4, BrandId = 3, ColorId = 3, ModelYear = 2019, DailyPrice = 300, Description = "Audi A2" 
+            Car car1 = new Car { 
+                BrandId = 1, ColorId = 1, ModelYear = 2019, DailyPrice = -300, Description = "Audi A5" 
             };
 
-            ICarService carService = new CarManager(
-                    new InMemoryCarDal(), 
-                    new BrandManager(new InMemoryBrandDal()),
-                    new ColorManager(new InMemoryColorDal())
-            );
-
-            carService.Add(car4);
+            ICarService carService = new CarManager(new EfCarDal());
+            carService.Add(car1);
             Console.WriteLine("-------");
-
-            List<Car> cars = carService.GetAll();
+            List<Car> cars = carService.GetCarsByColorId(1);
             foreach (var car in cars)
             {
-                Console.WriteLine(car);
+                Console.WriteLine($"Araba Adı : {car.Description}, Günlük Fiyatı : {car.DailyPrice}");
             }
         }
     }

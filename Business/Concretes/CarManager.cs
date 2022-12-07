@@ -12,96 +12,48 @@ namespace Business.Concretes
     public class CarManager : ICarService
     {
         private ICarDal carDal;
-        private IBrandService brandService;
-        private IColorService colorService;
 
-        public CarManager(ICarDal carDal, IBrandService brandService, IColorService colorService)
+        public CarManager(ICarDal carDal)
         {
             this.carDal = carDal;
-            this.brandService = brandService;
-            this.colorService = colorService;
         }
 
-        public void Add(Car car)
+        public void Add(Car entity)
         {
-            int carId = car.CarId;
-            if (carId <= 0)
+            if (IsValid(entity.Description,entity.DailyPrice))
             {
-                Console.WriteLine("Arabanın ID'si 1'den küçük olmaz! Girilen ID : "+ carId);
-                return;
-            }
-            if (IsValid(car.BrandId, car.ColorId, car.DailyPrice))
-            {
-                this.carDal.Add(car);
+                this.carDal.Add(entity);
             }
         }
 
-        public void DeleteById(int carId)
+        public List<Car> GetCarsByBrandId(int brandId)
         {
-            if (this.ExistById(carId))
-            {
-               this.carDal.DeleteById(carId);
-            }
+            return this.carDal.GetAll(car => car.BrandId == brandId);
         }
 
-        public List<Car> GetAll()
+        public List<Car> GetCarsByColorId(int colorId)
         {
-            return this.carDal.GetAll();
+            return this.carDal.GetAll(car => car.ColorId== colorId);
         }
 
-        public Car GetById(int carId)
+        private bool IsValid(string carName, double dailyPrice)
         {
-            if (this.ExistById(carId))
+            if (carName != null && carName.Length > 1)
             {
-                return this.carDal.GetById(carId);
-            }
-            return null;
-        }
-
-        public void Update(Car car)
-        {
-            if (ExistById(car.CarId))
-            {
-                if (IsValid(car.BrandId, car.ColorId, car.DailyPrice))
-                {
-                    this.carDal.Update(car);
-                }
-            }
-            
-        }
-
-        private bool ExistById(int carId)
-        {
-            List<Car> cars = this.carDal.GetAll();
-            foreach (Car car in cars)
-            {
-                if (car.CarId == carId)
+                if (dailyPrice > 0)
                 {
                     return true;
                 }
+                else
+                {
+                    Console.WriteLine("Arabanın günlük fiyatı 0'dan küçük olamaz! Girilen : " + dailyPrice);
+                }
             }
-            Console.WriteLine("ID'si " + carId + " olan bir araba yok! ");
-            return false; 
-        }
-
-        private bool IsValid(int brandId, int colorId, double dailyPrice)
-        {
-            if (!this.brandService.ExistByBrandId(brandId))
+            else
             {
-                Console.WriteLine("ID'si " + brandId + " olan bir marka yok! ");
-                return false;
+                Console.WriteLine("Araba ismi en az 2 karakter olmalıdır !");
             }
-            if (!this.colorService.ExistByColorId(colorId))
-            {
-                Console.WriteLine("ID'si " + colorId + " olan bir renk yok! ");
-                return false;
-            }
-            if (dailyPrice < 0)
-            {
-                Console.WriteLine("Araba kiralama fiyatı 0'dan küçük olamaz! Girilen fiyet : " + dailyPrice);
-                return false;
-            }
-            return true; 
+            return false;
         }
     }
 }

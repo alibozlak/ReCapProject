@@ -9,5 +9,7 @@ namespace Business.Abstracts
 {
     public interface ICarService : IEntityService<Car>
     {
+        List<Car> GetCarsByBrandId(int brandId);
+        List<Car> GetCarsByColorId(int colorId);
     }
 }

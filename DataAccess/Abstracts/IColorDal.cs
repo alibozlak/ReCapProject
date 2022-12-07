@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstracts
 {
-    public interface IColorDal : IEntityDal<Color>
+    public interface IColorDal : IEntityRepository<Color>
     {
-        bool ExistByColorId(int colorId);
     }
 }
