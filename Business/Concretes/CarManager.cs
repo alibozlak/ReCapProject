@@ -1,4 +1,5 @@
 ﻿using Business.Abstracts;
+using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
 using Entities.DTOs;
@@ -19,50 +20,67 @@ namespace Business.Concretes
             this.carDal = carDal;
         }
 
-        public void Add(Car entity)
+        public Result Add(Car entity)
         {
-            if (IsValid(entity.Description,entity.DailyPrice))
+            var carName = entity.Description;
+            if (IsValid(carName,entity.DailyPrice))
             {
                 this.carDal.Add(entity);
+                return new SuccessResult($"{carName} adlı araba eklendi");
             }
+            return new ErrorResult(Messages.Car.CarNameInvalid);
         }
 
-        public void Delete(Car entity)
+        public Result Delete(Car entity)
         {
             this.carDal.DeleteByEntity(entity);
+            return new SuccessResult($"{entity.Description} adlı araba silindi");
         }
 
-        public List<Car> GetAll()
+        public Result GetAll()
         {
-            return this.carDal.GetAll();
+            var data = this.carDal.GetAll();
+            var message = "Tüm arabalar getirildi";
+            return new SuccessDataResult<List<Car>>(message,data);
         }
 
-        public Car GetById(int id)
+        public Result GetById(int id)
         {
-            return this.carDal.Get(car => car.CarId == id);
+            var data = this.carDal.Get(car => car.CarId == id);
+            var message = $"ID'si {id} olan araba getirildi";
+            return new SuccessDataResult<Car>(message,data);
         }
 
-        public List<Car> GetCarsByBrandId(int brandId)
+        public Result GetCarsByBrandId(int brandId)
         {
-            return this.carDal.GetAll(car => car.BrandId == brandId);
+            var data = this.carDal.GetAll(car => car.BrandId == brandId);
+            var message = $"Marka ID'si {brandId} olan arabalar listelendi";
+            return new SuccessDataResult<List<Car>>(message,data);
         }
 
-        public List<Car> GetCarsByColorId(int colorId)
+        public Result GetCarsByColorId(int colorId)
         {
-            return this.carDal.GetAll(car => car.ColorId== colorId);
+            var data = this.carDal.GetAll(car => car.ColorId == colorId);
+            var message = $"Renk ID'si {colorId} olan arabalar listelendi";
+            return new SuccessDataResult<List<Car>>(message,data);
         }
 
-        public List<CarDetailDto> GetCarsByDetail()
+        public Result GetCarsByDetail()
         {
-            return this.carDal.GetCarsByDetail();
+            var data = this.carDal.GetCarsByDetail();
+            var message = "Tüm araba detayları listelendi";
+            return new SuccessDataResult<List<CarDetailDto>>(message,data);
         }
 
-        public void Update(Car entity)
+        public Result Update(Car entity)
         {
-            if (this.IsValid(entity.Description,entity.DailyPrice))
+            var carName = entity.Description;
+            if (this.IsValid(carName,entity.DailyPrice))
             {
                 this.carDal.Update(entity);
+                return new SuccessResult($"{carName} adlı araba güncellendi");
             }
+            return new ErrorResult(Messages.Car.CarNameInvalid);
         }
 
         private bool IsValid(string carName, double dailyPrice)
@@ -73,14 +91,6 @@ namespace Business.Concretes
                 {
                     return true;
                 }
-                else
-                {
-                    Console.WriteLine("Arabanın günlük fiyatı 0'dan küçük olamaz! Girilen : " + dailyPrice);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Araba ismi en az 2 karakter olmalıdır !");
             }
             return false;
         }

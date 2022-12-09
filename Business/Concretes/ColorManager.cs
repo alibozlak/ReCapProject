@@ -1,4 +1,5 @@
 ﻿using Business.Abstracts;
+using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
 using System;
@@ -18,42 +19,52 @@ namespace Business.Concretes
             this.colorDal = colorDal;
         }
 
-        public void Add(Color entity)
+        public Result Add(Color entity)
         {
-            if (!this.IsColorNameEmpty(entity.ColorName))
+            var colorName = entity.ColorName;
+            if (!this.IsColorNameEmpty(colorName))
             {
                 this.colorDal.Add(entity);
+                return new SuccessResult($"{colorName} adlı renk eklendi");
             }
+            return new ErrorResult(Messages.Color.ColorNameIsntEmpty);
         }
 
-        public void Delete(Color entity)
+        public Result Delete(Color entity)
         {
             this.colorDal.DeleteByEntity(entity);
+            return new SuccessResult($"{entity.ColorName} adlı renk silindi");
         }
 
-        public List<Color> GetAll()
+        public Result GetAll()
         {
-            return this.colorDal.GetAll();
+            var data = this.colorDal.GetAll();
+            var message = "Tüm renkler listelendi";
+            return new SuccessDataResult<List<Color>>(message,data);
         }
 
-        public Color GetById(int id)
+        public Result GetById(int id)
         {
-            return this.colorDal.Get(c => c.ColorId == id);
+            var data = this.colorDal.Get(c => c.ColorId == id);
+            var message = $"ID'si {id} olan renk getirildi";
+            return new SuccessDataResult<Color>(message,data);
         }
 
-        public void Update(Color entity)
+        public Result Update(Color entity)
         {
-            if (!this.IsColorNameEmpty(entity.ColorName))
+            var colorName = entity.ColorName;
+            if (!this.IsColorNameEmpty(colorName))
             {
                 this.colorDal.Update(entity);
+                return new SuccessResult($"{colorName} adlı renk güncellendi");
             }
+            return new ErrorResult(Messages.Color.ColorNameIsntEmpty);
         }
 
         private bool IsColorNameEmpty(string colorName)
         {
             if (colorName == null || colorName.Length < 1)
             {
-                Console.WriteLine("Arabanın renk ismi boş olamaz!");
                 return true;
             }
             return false;

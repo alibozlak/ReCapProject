@@ -12,6 +12,11 @@ namespace ConsoleUI
         {
             //EigthLessonFirstHomework();
 
+            //NinethLessonFirstHomework();
+        }
+
+        private static void NinethLessonFirstHomework()
+        {
             ICarService carService = new CarManager(new EfCarDal());
             //Car car2 = new Car
             //{
@@ -29,11 +34,11 @@ namespace ConsoleUI
 
             //carService.Delete(car2);
 
-            List<Car> cars = carService.GetAll();
-            foreach (var car in cars)
-            {
-                Console.WriteLine($"{car.CarId} - {car.Description} - {car.ModelYear} - {car.DailyPrice}");
-            }
+            //List<Car> cars = carService.GetAll();
+            //foreach (var car in cars)
+            //{
+            //    Console.WriteLine($"{car.CarId} - {car.Description} - {car.ModelYear} - {car.DailyPrice}");
+            //}
             Console.WriteLine("---------");
 
             IColorService colorService = new ColorManager(new EfColorDal());
@@ -48,11 +53,11 @@ namespace ConsoleUI
 
             //colorService.Delete(color2);
 
-            List<Color> colors = colorService.GetAll();
-            foreach (var color in colors)
-            {
-                Console.WriteLine($"{color.ColorId} - {color.ColorName}");
-            }
+            //List<Color> colors = colorService.GetAll();
+            //foreach (var color in colors)
+            //{
+            //    Console.WriteLine($"{color.ColorId} - {color.ColorName}");
+            //}
             Console.WriteLine("---------");
 
             IBrandService brandService = new BrandManager(new EfBrandDal());
@@ -67,19 +72,19 @@ namespace ConsoleUI
 
             //brandService.Delete(brand2);
 
-            List<Brand> brands = brandService.GetAll();
-            foreach (var brand in brands)
-            {
-                Console.WriteLine($"{brand.BrandId} - {brand.BrandName}");
-            }
+            //List<Brand> brands = brandService.GetAll();
+            //foreach (var brand in brands)
+            //{
+            //    Console.WriteLine($"{brand.BrandId} - {brand.BrandName}");
+            //}
             Console.WriteLine("----- Car Detail DTO -----");
 
-            List<CarDetailDto> carDetailDtos = carService.GetCarsByDetail();
-            foreach (var carDetailDto in carDetailDtos)
-            {
-                Console.WriteLine($"{carDetailDto.CarName} - {carDetailDto.BrandName} - " +
-                    $"{carDetailDto.ColorName} - {carDetailDto.DailyPrice}");
-            }
+            //List<CarDetailDto> carDetailDtos = carService.GetCarsByDetail();
+            //foreach (var carDetailDto in carDetailDtos)
+            //{
+            //    Console.WriteLine($"{carDetailDto.CarName} - {carDetailDto.BrandName} - " +
+            //        $"{carDetailDto.ColorName} - {carDetailDto.DailyPrice}");
+            //}
         }
 
         private static void EigthLessonFirstHomework()
@@ -96,11 +101,11 @@ namespace ConsoleUI
             ICarService carService = new CarManager(new EfCarDal());
             carService.Add(car1);
             Console.WriteLine("-------");
-            List<Car> cars = carService.GetCarsByColorId(1);
-            foreach (var car in cars)
-            {
-                Console.WriteLine($"Araba Adı : {car.Description}, Günlük Fiyatı : {car.DailyPrice}");
-            }
+            //List<Car> cars = carService.GetCarsByColorId(1);
+            //foreach (var car in cars)
+            //{
+            //    Console.WriteLine($"Araba Adı : {car.Description}, Günlük Fiyatı : {car.DailyPrice}");
+            //}
         }
     }
 }

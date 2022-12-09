@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Utilities.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,10 @@ namespace Business.Abstracts
 {
     public interface IEntityService<T> where T : class, IEntity, new()
     {
-        void Add(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-        List<T> GetAll();
-        T GetById(int id);
+        Result Add(T entity);
+        Result Update(T entity);
+        Result Delete(T entity);
+        Result GetAll();
+        Result GetById(int id);
     }
 }

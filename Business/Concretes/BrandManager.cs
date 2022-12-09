@@ -1,4 +1,5 @@
 ﻿using Business.Abstracts;
+using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
 using System;
@@ -18,42 +19,52 @@ namespace Business.Concretes
             this.brandDal = brandDal;
         }
 
-        public void Add(Brand entity)
+        public Result Add(Brand entity)
         {
-            if (!this.IsBrandNameEmpty(entity.BrandName))
+            var brandName = entity.BrandName;
+            if (!this.IsBrandNameEmpty(brandName))
             {
                 this.brandDal.Add(entity);
+                return new SuccessResult($"{brandName} adlı marka eklendi");
             }
+            return new ErrorResult(Messages.Brand.BrandNameIsntEmpty);
         }
 
-        public void Delete(Brand entity)
+        public Result Delete(Brand entity)
         {
             this.brandDal.DeleteByEntity(entity);
+            return new SuccessResult($"{entity.BrandName} adlı marka silindi");
         }
 
-        public List<Brand> GetAll()
+        public Result GetAll()
         {
-            return this.brandDal.GetAll();
+            var data = this.brandDal.GetAll();
+            var message = "Tüm markalar listelendi";
+            return new SuccessDataResult<List<Brand>>(message,data);
         }
 
-        public Brand GetById(int id)
+        public Result GetById(int id)
         {
-            return this.brandDal.Get(brand => brand.BrandId == id);
+            var data = this.brandDal.Get(brand => brand.BrandId == id);
+            var message = $"ID'si {id} olan marka getirildi";
+            return new SuccessDataResult<Brand>(message,data);
         }
 
-        public void Update(Brand entity)
+        public Result Update(Brand entity)
         {
-            if (!this.IsBrandNameEmpty(entity.BrandName))
+            var brandName = entity.BrandName;
+            if (!this.IsBrandNameEmpty(brandName))
             {
                 this.brandDal.Update(entity);
+                return new SuccessResult($"{brandName} adlı marka güncellendi");
             }
+            return new ErrorResult(Messages.Brand.BrandNameIsntEmpty);
         }
 
         private bool IsBrandNameEmpty(string brandName)
         {
             if (brandName == null || brandName.Length < 1)
             {
-                Console.WriteLine("Araba Markası ismi boş olamaz! ");
                 return true;
             }
             return false;
