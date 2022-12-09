@@ -15,8 +15,15 @@ namespace DataAccess.Concretes.EntityFramework
             optionsBuilder.UseNpgsql("Host=localhost:5432;Database=RentACar2021;Username=postgres;Password=postgre84,SQL43");
         }
 
-        public DbSet<Car> cars { get; set; }    // <-- Postgre'de tablo ismini PascalCase Cars yaptığımda sorun çıkardı!
-        public DbSet<Brand> brands { get; set; }
-        public DbSet<Color> colors { get; set; } 
+        public DbSet<Car> Cars { get; set; }   
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Color> Colors { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Car>().ToTable("cars");
+            modelBuilder.Entity<Brand>().ToTable("brands");
+            modelBuilder.Entity<Color>().ToTable("colors");
+        }
     }
 }
