@@ -14,7 +14,7 @@ namespace Business.Abstracts
         Result Add(T entity);
         Result Update(T entity);
         Result Delete(T entity);
-        Result GetAll();
+        SuccessDataResult<List<T>> GetAll();
         Result GetById(int id);
     }
 }

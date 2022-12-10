@@ -37,7 +37,7 @@ namespace Business.Concretes
             return new SuccessResult($"{entity.Description} adlı araba silindi");
         }
 
-        public Result GetAll()
+        public SuccessDataResult<List<Car>> GetAll()
         {
             var data = this.carDal.GetAll();
             var message = "Tüm arabalar getirildi";

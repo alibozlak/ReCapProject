@@ -36,7 +36,7 @@ namespace Business.Concretes
             return new SuccessResult($"{entity.BrandName} adlı marka silindi");
         }
 
-        public Result GetAll()
+        public SuccessDataResult<List<Brand>> GetAll()
         {
             var data = this.brandDal.GetAll();
             var message = "Tüm markalar listelendi";

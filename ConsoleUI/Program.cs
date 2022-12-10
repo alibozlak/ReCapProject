@@ -1,8 +1,10 @@
 ﻿using Business.Abstracts;
 using Business.Concretes;
+using Core.Utilities.Results;
 using DataAccess.Concretes.EntityFramework;
 using Entities.Concretes;
 using Entities.DTOs;
+using Microsoft.VisualBasic;
 
 namespace ConsoleUI
 {
@@ -11,8 +13,43 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             //EigthLessonFirstHomework();
-
             //NinethLessonFirstHomework();
+
+            //IUserService userService = new UserManager(new EfUserDal());
+            //User user1 = new User
+            //{
+            //    FirstName = "Mine",
+            //    LastName = "Bozlak",
+            //    Email = "mine@outlook.com",
+            //    Password = "1234mine456"
+            //};
+            //userService.Add(user1);
+            //var users = userService.GetAll().Data;
+            //users.ForEach(u => Console.WriteLine(u));
+
+            ICustomerService customerService = new CustomerManager(new EfCustomerDal());
+            //Customer customer1 = new Customer
+            //{
+            //    UserId = 2,
+            //    CompanyName = "Meryem Kurban Çocuk Kreşi"
+            //};
+            //Result result = customerService.Add(customer1);
+            //Console.WriteLine(result.Message);
+            var customers = customerService.GetAll().Data;
+            customers.ForEach(c => Console.WriteLine(c));
+            Console.WriteLine("---------");
+
+            IRentalService rentalService = new RentalManager(new EfRentalDal());
+            Rental rental1 = new Rental
+            {
+                CarId = 1,
+                CustomerId = 1,
+                RentDate = "2022-12-11"
+            };
+            Result result = rentalService.Add(rental1);
+            Console.WriteLine(result.Message);
+            //var rentals = rentalService.GetAll().Data;
+            //rentals.ForEach(r => Console.WriteLine(r));
         }
 
         private static void NinethLessonFirstHomework()

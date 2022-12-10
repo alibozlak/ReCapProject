@@ -36,7 +36,7 @@ namespace Business.Concretes
             return new SuccessResult($"{entity.ColorName} adlı renk silindi");
         }
 
-        public Result GetAll()
+        public SuccessDataResult<List<Color>> GetAll()
         {
             var data = this.colorDal.GetAll();
             var message = "Tüm renkler listelendi";
