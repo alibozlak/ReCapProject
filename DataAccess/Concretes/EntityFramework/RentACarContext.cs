@@ -30,7 +30,7 @@ namespace DataAccess.Concretes.EntityFramework
             modelBuilder.Entity<Car>().Property(c => c.ColorId).HasColumnName("color_id");
             modelBuilder.Entity<Car>().Property(c => c.ModelYear).HasColumnName("model_year");
             modelBuilder.Entity<Car>().Property(c => c.DailyPrice).HasColumnName("daily_price");
-            modelBuilder.Entity<Car>().Property(c => c.Description).HasColumnName("discription");
+            modelBuilder.Entity<Car>().Property(c => c.Description).HasColumnName("description");
 
             modelBuilder.Entity<Brand>().ToTable("brands");
             modelBuilder.Entity<Brand>().Property(b => b.BrandId).HasColumnName("brand_id");
