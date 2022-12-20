@@ -1,6 +1,6 @@
 ﻿using Business.Abstracts;
 using Business.ValidationRules.FluentValidation;
-using Core.CrossCuttingConcerns.Validation.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -16,10 +16,9 @@ namespace Business.Concretes
             this.customerDal = customerDal;
         }
 
+        [ValidationAspect(typeof(CustomerValidator))]
         public Result Add(Customer entity)
         {
-            ValidationTool.Validate(new CustomerValidator(), entity);
-
             this.customerDal.Add(entity);
             return new SuccessResult("Müşteri eklendi");
         }
@@ -41,10 +40,9 @@ namespace Business.Concretes
             throw new NotImplementedException();
         }
 
+        [ValidationAspect(typeof(CustomerValidator))]
         public Result Update(Customer entity)
         {
-            ValidationTool.Validate(new CustomerValidator(), entity);
-
             this.customerDal.Update(entity);
             return new SuccessResult($"Şirket ismi {entity.CompanyName} olan müşteri güncellendi");
         }

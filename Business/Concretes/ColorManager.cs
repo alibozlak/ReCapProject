@@ -1,6 +1,6 @@
 ﻿using Business.Abstracts;
 using Business.ValidationRules.FluentValidation;
-using Core.CrossCuttingConcerns.Validation.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -16,10 +16,9 @@ namespace Business.Concretes
             this.colorDal = colorDal;
         }
 
+        [ValidationAspect(typeof(ColorValidator))]
         public Result Add(Color entity)
         {
-            ValidationTool.Validate(new ColorValidator(), entity);
-
             this.colorDal.Add(entity);
             return new SuccessResult($"{entity.ColorName} adlı renk eklendi");
         }
@@ -44,10 +43,9 @@ namespace Business.Concretes
             return new SuccessDataResult<Color>(message,data);
         }
 
+        [ValidationAspect(typeof(ColorValidator))]
         public Result Update(Color entity)
         {
-            ValidationTool.Validate(new ColorValidator(), entity);
-
             this.colorDal.Update(entity);
             return new SuccessResult($"{entity.ColorName} adlı renk güncellendi");
         }

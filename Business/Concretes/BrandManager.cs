@@ -1,5 +1,6 @@
 ﻿using Business.Abstracts;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
@@ -16,9 +17,11 @@ namespace Business.Concretes
             this.brandDal = brandDal;
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public Result Add(Brand entity)
         {
-            ValidationTool.Validate(new BrandValidator(), entity);
+            // ****** ValidationAspect'e geçildi *******
+            //ValidationTool.Validate(new BrandValidator(), entity);
 
             this.brandDal.Add(entity);
             return new SuccessResult($"{entity.BrandName} adlı marka eklendi");
@@ -44,9 +47,11 @@ namespace Business.Concretes
             return new SuccessDataResult<Brand>(message,data);
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public Result Update(Brand entity)
         {
-            ValidationTool.Validate(new BrandValidator(),entity);
+            // ****** ValidationAspect'e geçildi *******
+            //ValidationTool.Validate(new BrandValidator(),entity);
 
             this.brandDal.Update(entity);
             return new SuccessResult($"{entity.BrandName} adlı marka güncellendi");

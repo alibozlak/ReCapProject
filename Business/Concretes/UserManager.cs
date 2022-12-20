@@ -1,6 +1,6 @@
 ﻿using Business.Abstracts;
 using Business.ValidationRules.FluentValidation;
-using Core.CrossCuttingConcerns.Validation.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -16,10 +16,9 @@ namespace Business.Concretes
             this.userDal = userDal;
         }
 
+        [ValidationAspect(typeof(UserValidator))]
         public Result Add(User entity)
         {
-            ValidationTool.Validate(new UserValidator(),entity);
-
             this.userDal.Add(entity);
             return new SuccessResult($"Email adresi {entity.Email} olan kullanıcı eklendi");
         }
@@ -41,10 +40,9 @@ namespace Business.Concretes
             throw new NotImplementedException();
         }
 
+        [ValidationAspect(typeof(UserValidator))]
         public Result Update(User entity)
         {
-            ValidationTool.Validate(new UserValidator(), entity);
-
             this.userDal.Update(entity);
             return new SuccessResult($"Email adresi {entity.Email} olan kullanıcı güncellendi");
         }

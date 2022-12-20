@@ -1,6 +1,6 @@
 ﻿using Business.Abstracts;
 using Business.ValidationRules.FluentValidation;
-using Core.CrossCuttingConcerns.Validation.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -17,10 +17,9 @@ namespace Business.Concretes
             this.carDal = carDal;
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public Result Add(Car entity)
         {
-            ValidationTool.Validate(new CarValidator(),entity);
-
             this.carDal.Add(entity);
             return new SuccessResult($"{entity.Description} adlı araba eklendi");
         }
@@ -66,10 +65,9 @@ namespace Business.Concretes
             return new SuccessDataResult<List<CarDetailDto>>(message,data);
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public Result Update(Car entity)
         {
-            ValidationTool.Validate(new CarValidator(), entity);
-
             this.carDal.Update(entity);
             return new SuccessResult($"{entity.Description} adlı araba güncellendi");
         }
