@@ -1,12 +1,9 @@
 ﻿using Business.Abstracts;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concretes
 {
@@ -21,8 +18,8 @@ namespace Business.Concretes
 
         public Result Add(Customer entity)
         {
-            // Business codes here
-            //
+            ValidationTool.Validate(new CustomerValidator(), entity);
+
             this.customerDal.Add(entity);
             return new SuccessResult("Müşteri eklendi");
         }
@@ -46,7 +43,10 @@ namespace Business.Concretes
 
         public Result Update(Customer entity)
         {
-            throw new NotImplementedException();
+            ValidationTool.Validate(new CustomerValidator(), entity);
+
+            this.customerDal.Update(entity);
+            return new SuccessResult($"Şirket ismi {entity.CompanyName} olan müşteri güncellendi");
         }
     }
 }

@@ -1,12 +1,9 @@
 ﻿using Business.Abstracts;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concretes
 {
@@ -21,10 +18,10 @@ namespace Business.Concretes
 
         public Result Add(User entity)
         {
-            //
-            //
+            ValidationTool.Validate(new UserValidator(),entity);
+
             this.userDal.Add(entity);
-            return new SuccessResult($"{entity.FirstName} adlı user eklendi");
+            return new SuccessResult($"Email adresi {entity.Email} olan kullanıcı eklendi");
         }
 
         public Result Delete(User entity)
@@ -46,7 +43,10 @@ namespace Business.Concretes
 
         public Result Update(User entity)
         {
-            throw new NotImplementedException();
+            ValidationTool.Validate(new UserValidator(), entity);
+
+            this.userDal.Update(entity);
+            return new SuccessResult($"Email adresi {entity.Email} olan kullanıcı güncellendi");
         }
     }
 }

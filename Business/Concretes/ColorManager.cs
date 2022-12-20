@@ -1,12 +1,9 @@
 ﻿using Business.Abstracts;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concretes
 {
@@ -21,13 +18,10 @@ namespace Business.Concretes
 
         public Result Add(Color entity)
         {
-            var colorName = entity.ColorName;
-            if (!this.IsColorNameEmpty(colorName))
-            {
-                this.colorDal.Add(entity);
-                return new SuccessResult($"{colorName} adlı renk eklendi");
-            }
-            return new ErrorResult(Messages.Color.ColorNameIsntEmpty);
+            ValidationTool.Validate(new ColorValidator(), entity);
+
+            this.colorDal.Add(entity);
+            return new SuccessResult($"{entity.ColorName} adlı renk eklendi");
         }
 
         public Result Delete(Color entity)
@@ -52,22 +46,20 @@ namespace Business.Concretes
 
         public Result Update(Color entity)
         {
-            var colorName = entity.ColorName;
-            if (!this.IsColorNameEmpty(colorName))
-            {
-                this.colorDal.Update(entity);
-                return new SuccessResult($"{colorName} adlı renk güncellendi");
-            }
-            return new ErrorResult(Messages.Color.ColorNameIsntEmpty);
+            ValidationTool.Validate(new ColorValidator(), entity);
+
+            this.colorDal.Update(entity);
+            return new SuccessResult($"{entity.ColorName} adlı renk güncellendi");
         }
 
-        private bool IsColorNameEmpty(string colorName)
-        {
-            if (colorName == null || colorName.Length < 1)
-            {
-                return true;
-            }
-            return false;
-        }
+        // ************* FluentValidation'a geçildi **************
+        //private bool IsColorNameEmpty(string colorName)
+        //{
+        //    if (colorName == null || colorName.Length < 1)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
     }
 }

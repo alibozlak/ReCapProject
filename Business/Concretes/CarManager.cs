@@ -1,13 +1,10 @@
 ﻿using Business.Abstracts;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
 using Entities.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concretes
 {
@@ -22,13 +19,10 @@ namespace Business.Concretes
 
         public Result Add(Car entity)
         {
-            var carName = entity.Description;
-            if (IsValid(carName,entity.DailyPrice))
-            {
-                this.carDal.Add(entity);
-                return new SuccessResult($"{carName} adlı araba eklendi");
-            }
-            return new ErrorResult(Messages.Car.CarNameInvalid);
+            ValidationTool.Validate(new CarValidator(),entity);
+
+            this.carDal.Add(entity);
+            return new SuccessResult($"{entity.Description} adlı araba eklendi");
         }
 
         public Result Delete(Car entity)
@@ -74,25 +68,23 @@ namespace Business.Concretes
 
         public Result Update(Car entity)
         {
-            var carName = entity.Description;
-            if (this.IsValid(carName,entity.DailyPrice))
-            {
-                this.carDal.Update(entity);
-                return new SuccessResult($"{carName} adlı araba güncellendi");
-            }
-            return new ErrorResult(Messages.Car.CarNameInvalid);
+            ValidationTool.Validate(new CarValidator(), entity);
+
+            this.carDal.Update(entity);
+            return new SuccessResult($"{entity.Description} adlı araba güncellendi");
         }
 
-        private bool IsValid(string carName, double dailyPrice)
-        {
-            if (carName != null && carName.Length > 1)
-            {
-                if (dailyPrice > 0)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        // ****** FluentValidation'a geçildi ********
+        //private bool IsValid(string carName, double dailyPrice)
+        //{
+        //    if (carName != null && carName.Length > 1)
+        //    {
+        //        if (dailyPrice > 0)
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
     }
 }

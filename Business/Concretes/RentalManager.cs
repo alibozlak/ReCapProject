@@ -1,12 +1,9 @@
 ﻿using Business.Abstracts;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concretes
 {
@@ -21,6 +18,8 @@ namespace Business.Concretes
 
         public Result Add(Rental entity)
         {
+            ValidationTool.Validate(new RentalValidator(), entity);
+
             int customerId = entity.CustomerId;
             if (this.rentalDal.HaveAllCarsTurned(customerId))
             {
@@ -49,7 +48,10 @@ namespace Business.Concretes
 
         public Result Update(Rental entity)
         {
-            throw new NotImplementedException();
+            ValidationTool.Validate(new CustomerValidator(), entity);
+
+            this.rentalDal.Update(entity);
+            return new SuccessResult($"Kimliği {entity.CarId} olan araç güncellendi");
         }
     }
 }

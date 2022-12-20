@@ -1,12 +1,9 @@
 ﻿using Business.Abstracts;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concretes
 {
@@ -21,13 +18,10 @@ namespace Business.Concretes
 
         public Result Add(Brand entity)
         {
-            var brandName = entity.BrandName;
-            if (!this.IsBrandNameEmpty(brandName))
-            {
-                this.brandDal.Add(entity);
-                return new SuccessResult($"{brandName} adlı marka eklendi");
-            }
-            return new ErrorResult(Messages.Brand.BrandNameIsntEmpty);
+            ValidationTool.Validate(new BrandValidator(), entity);
+
+            this.brandDal.Add(entity);
+            return new SuccessResult($"{entity.BrandName} adlı marka eklendi");
         }
 
         public Result Delete(Brand entity)
@@ -52,22 +46,20 @@ namespace Business.Concretes
 
         public Result Update(Brand entity)
         {
-            var brandName = entity.BrandName;
-            if (!this.IsBrandNameEmpty(brandName))
-            {
-                this.brandDal.Update(entity);
-                return new SuccessResult($"{brandName} adlı marka güncellendi");
-            }
-            return new ErrorResult(Messages.Brand.BrandNameIsntEmpty);
+            ValidationTool.Validate(new BrandValidator(),entity);
+
+            this.brandDal.Update(entity);
+            return new SuccessResult($"{entity.BrandName} adlı marka güncellendi");
         }
 
-        private bool IsBrandNameEmpty(string brandName)
-        {
-            if (brandName == null || brandName.Length < 1)
-            {
-                return true;
-            }
-            return false;
-        }
+        // ***** FluentValidation'a Geçildi : *********
+        //private bool IsBrandNameEmpty(string brandName)
+        //{
+        //    if (brandName == null || brandName.Length < 1)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
     }
 }
